@@ -86,10 +86,18 @@ def split_data(data):
     :return: Tuple of training and validation DataFrames.
     """
     try:
+        # Ensure the index is converted to datetime if not already
+        if not isinstance(data.index, pd.DatetimeIndex):
+            logger.info("Converting index to DatetimeIndex...")
+            data.index = pd.to_datetime(data.index)
+
+        # Perform slicing using datetime strings
         train_data = data['2004':'2020']
         val_data = data['2021':'2024']
+        
         logger.info(f"Split data into training ({train_data.shape}) and validation ({val_data.shape}) sets.")
         return train_data, val_data
     except Exception as e:
         logger.error("Error splitting data into training and validation sets.", exc_info=True)
         raise
+
