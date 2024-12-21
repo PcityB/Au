@@ -4,16 +4,24 @@ from utils.pattern_discovery import setup_ga, evolve_population
 from utils.validation import validate_pattern
 from utils.backtest import backtest_strategy
 from utils.sql_analyzer import create_database, insert_pattern, query_patterns, resolve_conflicts
+from utils.dataset_downloader import download_dataset
 from utils.logger import logger
 
 import config
+import os
 
 def main():
     try:
         logger.info("Starting XAU/USD Pattern System...")
-
+        
+        # Check if dataset exists; if not, download it
+        dataset_path = os.path.join("data", "XAUUSD_Historical_Data.csv")
+        if not os.path.exists(dataset_path):
+            logger.info("Dataset not found locally. Downloading...")
+            download_dataset("novandraanugrah/xauusd-gold-price-historical-data-2004-2024", "data")
+        
         # Load dataset
-        raw_data = load_data(config.DATA_FILE)
+        raw_data = load_data(dataset_path)
         logger.info("Data loaded successfully.")
 
         # Create SQLite database for storing patterns
