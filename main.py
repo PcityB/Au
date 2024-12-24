@@ -29,7 +29,7 @@ def main():
 
             # Split data into training and validation sets
             train_data, val_data = split_data(df)
-
+            train_data.head()
             # Discover prototype patterns for each grid size
             toolbox = setup_ga()
             for rows, cols in config.GRID_SIZES:

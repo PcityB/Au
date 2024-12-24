@@ -31,9 +31,13 @@ def load_csv_files(file_paths):
         try:
             logger.info(f"Loading file: {file_path}")
             df = pd.read_csv(file_path)
+            df = df.dropna()
+            df['DateTime'] = pd.to_datetime(df['Date'] + ' ' + df['Time'], format='%Y.%m.%d %H:%M') 
+            df.set_index('DateTime', inplace=True) 
+            df.drop(columns=['Date', 'Time'], inplace=True)
             key = os.path.splitext(os.path.basename(file_path))[0]  # Use filename without extension as key
             data_frames[key] = df
-            logger.info(f"Loaded {file_path} with shape {df.shape}")
+            logger.info(f"Loaded {file_path} with shape {data_frames[key].shape}")
         except Exception as e:
             logger.error(f"Error loading file {file_path}: {e}", exc_info=True)
             raise
@@ -85,6 +89,7 @@ def split_data(data):
     :param data: Pandas DataFrame with historical price data.
     :return: Tuple of training and validation DataFrames.
     """
+
     try:
         # Ensure the index is converted to datetime if not already
         if not isinstance(data.index, pd.DatetimeIndex):
@@ -94,7 +99,6 @@ def split_data(data):
         # Perform slicing using datetime strings
         train_data = data['2004':'2020']
         val_data = data['2021':'2024']
-        
         logger.info(f"Split data into training ({train_data.shape}) and validation ({val_data.shape}) sets.")
         return train_data, val_data
     except Exception as e:
