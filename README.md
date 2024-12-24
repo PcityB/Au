@@ -1,1 +1,4 @@
+https://www.researchgate.net/publication/315799323_An_Algorithmic_Framework_for_Frequent_Intraday_Pattern_Recognition_and_Exploitation_in_Forex_Market_Knowledge_and_Information_Systems
+
+
 # Au
